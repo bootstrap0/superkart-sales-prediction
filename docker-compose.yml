@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "7860:7860"
+    networks:
+      - app-net
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_URL=http://host.docker.internal:7860
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app-net
+    depends_on:
+      - backend
+
+networks:
+  app-net:
+    driver: bridge
